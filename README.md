@@ -10,7 +10,7 @@
 - `subscription`：Nginx 静态订阅，默认监听宿主机 TCP `8080`。
 - `data/`：初始化后生成的私钥、UUID 和订阅，已由 `.gitignore` 排除，禁止提交。
 
-本项目固定 Xray `25.6.8`。Mihomo 文档说明 Xray `26.7.11+` 的 REALITY 变更可能不兼容，升级前务必完成客户端实测。
+本项目固定 Xray `26.6.27`。Mihomo 文档说明 Xray `26.7.11+` 的 REALITY 变更可能不兼容，升级前务必完成客户端实测。
 
 ## 前置条件
 

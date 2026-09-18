@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 ENV_FILE="${ROOT_DIR}/.env"
 DATA_DIR="${ROOT_DIR}/data"
-XRAY_IMAGE="ghcr.io/xtls/xray-core:25.6.8"
+XRAY_IMAGE="ghcr.io/xtls/xray-core:26.6.27"
 
 fail() { printf '错误：%s\n' "$*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "找不到 docker"

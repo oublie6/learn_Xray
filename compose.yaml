@@ -5,7 +5,9 @@ services:
     restart: unless-stopped
     command: ["run", "-c", "/etc/xray/config.json"]
     ports:
-      - "${XRAY_PORT:-443}:443/tcp"
+      - "${REALITY_PORT:-443}:443/tcp"
+      - "${SS_PORT:-8443}:8388/tcp"
+      - "${SS_PORT:-8443}:8388/udp"
     volumes:
       - ./data/xray/config.json:/etc/xray/config.json:ro
     security_opt:

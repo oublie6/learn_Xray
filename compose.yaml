@@ -39,4 +39,3 @@ services:
     depends_on:
       xray:
         condition: service_healthy
-

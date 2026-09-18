@@ -14,4 +14,3 @@ docker compose ps
 
 printf '\n订阅信息：\n'
 sed -n 's/^SUBSCRIPTION_URL=/  /p' data/deployment.env
-

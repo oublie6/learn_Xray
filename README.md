@@ -74,6 +74,17 @@ REALITY_TARGET=www.microsoft.com:443
 sed -n 's/^SUBSCRIPTION_URL=//p' data/deployment.env
 ```
 
+### 默认分流规则
+
+订阅默认使用 `rule` 模式，按顺序执行：
+
+1. `.lan`、`.local` 和 IPv4/IPv6 私有地址直连；
+2. 中国大陆域名直连；
+3. 中国大陆 IP 地址直连；
+4. 其余流量交给 `PROXY` 策略组。
+
+国内域名和 IP 使用 MetaCubeX `meta-rules-dat` 的压缩 `.mrs` 规则集，由 Mihomo 每 24 小时更新，无需在仓库中维护大量 IP。首次加载订阅时，客户端需要能够访问 GitHub Raw 下载两个规则文件。规则按从上到下顺序匹配，可在 Clash Verge 中切换全局、规则或直连模式。
+
 ## 校验与排障
 
 ```bash

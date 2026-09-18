@@ -21,6 +21,7 @@ source "${ENV_FILE}"
 set +a
 
 SERVER_ADDRESS=${SERVER_ADDRESS:-}
+NODE_NAME=${NODE_NAME:-learn-xray}
 REALITY_PORT=${REALITY_PORT:-443}
 SS_PORT=${SS_PORT:-8443}
 SUBSCRIPTION_PORT=${SUBSCRIPTION_PORT:-8080}
@@ -29,6 +30,7 @@ REALITY_TARGET=${REALITY_TARGET:-${REALITY_SERVER_NAME}:443}
 
 [[ -n "${SERVER_ADDRESS}" && "${SERVER_ADDRESS}" != "203.0.113.10" ]] || \
   fail "请先在 .env 中把 SERVER_ADDRESS 改成服务器公网 IP 或域名"
+[[ "${NODE_NAME}" =~ ^[A-Za-z0-9._-]+$ ]] || fail "NODE_NAME 只能包含字母、数字、点、下划线和连字符"
 [[ "${REALITY_PORT}" =~ ^[0-9]+$ && "${REALITY_PORT}" -ge 1 && "${REALITY_PORT}" -le 65535 ]] || fail "REALITY_PORT 无效"
 [[ "${SS_PORT}" =~ ^[0-9]+$ && "${SS_PORT}" -ge 1 && "${SS_PORT}" -le 65535 ]] || fail "SS_PORT 无效"
 [[ "${SUBSCRIPTION_PORT}" =~ ^[0-9]+$ && "${SUBSCRIPTION_PORT}" -ge 1 && "${SUBSCRIPTION_PORT}" -le 65535 ]] || fail "SUBSCRIPTION_PORT 无效"
@@ -117,14 +119,14 @@ rule-providers:
     path: ./ruleset/cn-ip.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
 proxies:
-  - name: learn-xray-ss2022
+  - name: ${NODE_NAME}-ss2022
     type: ss
     server: ${SERVER_ADDRESS}
     port: ${SS_PORT}
     cipher: 2022-blake3-aes-128-gcm
     password: ${SS_PASSWORD}
     udp: true
-  - name: learn-xray-reality
+  - name: ${NODE_NAME}-reality
     type: vless
     server: ${SERVER_ADDRESS}
     port: ${REALITY_PORT}
@@ -142,8 +144,8 @@ proxy-groups:
   - name: PROXY
     type: select
     proxies:
-      - learn-xray-ss2022
-      - learn-xray-reality
+      - ${NODE_NAME}-ss2022
+      - ${NODE_NAME}-reality
       - DIRECT
 rules:
   - DOMAIN-SUFFIX,lan,DIRECT
@@ -164,6 +166,7 @@ EOF
 
 cat >"${DATA_DIR}/deployment.env" <<EOF
 UUID=${UUID}
+NODE_NAME=${NODE_NAME}
 PUBLIC_KEY=${PUBLIC_KEY}
 SHORT_ID=${SHORT_ID}
 SS_PASSWORD=${SS_PASSWORD}

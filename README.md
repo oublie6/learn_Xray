@@ -46,6 +46,7 @@ cp .env.example .env
 
 ```dotenv
 SERVER_ADDRESS=你的公网IP或域名
+NODE_NAME=节点名称，例如 hk-01
 REALITY_PORT=443
 SS_PORT=8443
 SUBSCRIPTION_PORT=8080
@@ -60,6 +61,40 @@ REALITY_TARGET=www.microsoft.com:443
 ```
 
 首次运行会拉取镜像，并生成 UUID、REALITY 密钥、Short ID、SS 2022 密钥和随机订阅令牌。终端将输出订阅地址。
+
+## 部署第二个节点
+
+每台服务器都应独立生成凭据，不要复制第一台服务器的 `data/`。以第二台服务器为例：
+
+```bash
+git clone https://github.com/oublie6/learn_Xray.git
+cd learn_Xray
+cp .env.example .env
+```
+
+编辑第二台服务器的 `.env`：
+
+```dotenv
+SERVER_ADDRESS=第二台服务器的公网IP或域名
+NODE_NAME=hk-02
+REALITY_PORT=443
+SS_PORT=8443
+SUBSCRIPTION_PORT=8080
+REALITY_SERVER_NAME=www.microsoft.com
+REALITY_TARGET=www.microsoft.com:443
+```
+
+在第二台服务器的云安全组放行 `8443/TCP+UDP`、可选的 `443/TCP` 和订阅使用的 `8080/TCP`，然后执行：
+
+```bash
+./scripts/deploy.sh
+docker compose ps
+curl --fail "$(sed -n 's/^SUBSCRIPTION_URL=//p' data/deployment.env)" >/dev/null
+```
+
+把第二台输出的订阅 URL 作为另一个订阅添加到 Clash Verge。不同服务器务必设置不同的 `NODE_NAME`，例如 `hk-01`、`hk-02`，否则客户端合并多个订阅时会出现同名节点。每台服务器的订阅 URL、UUID 和密钥都是独立的；泄露或轮换一个节点不会影响其他节点。
+
+如果希望一个 URL 同时下发多台服务器，需要额外部署订阅聚合服务；本仓库目前采用“一台服务器一个订阅”的简单模型。
 
 ## Clash Verge / Mihomo
 

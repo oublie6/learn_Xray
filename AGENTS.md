@@ -9,6 +9,7 @@
 - 配置模板只放非敏感默认值；禁止提交 `.env`、`data/`、UUID、私钥、SS 密钥或真实订阅令牌。
 - Xray 镜像版本必须在 `compose.yaml` 与 `scripts/init.sh` 中保持一致。
 - 修改端口时同步检查 `.env.example`、`compose.yaml`、`scripts/init.sh`、生成的订阅模板和 `README.md`。
+- 多节点部署必须使用不同 `NODE_NAME`；节点名只允许安全的 ASCII 字符，避免未经转义的值破坏 YAML。
 - 保持脚本可重复执行，并使用 `set -euo pipefail`。
 - 服务容器继续以最小权限运行；不要无理由移除 `no-new-privileges` 或增加 Linux capabilities。
 - 默认订阅必须能被当前稳定版 Mihomo 解析；REALITY 的版本升级需先核对 Mihomo 兼容性。

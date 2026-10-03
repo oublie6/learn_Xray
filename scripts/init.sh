@@ -159,6 +159,14 @@ rules:
   - IP-CIDR6,::1/128,DIRECT,no-resolve
   - IP-CIDR6,fc00::/7,DIRECT,no-resolve
   - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  # OpenAI / ChatGPT：按域名强制走代理，不依赖会变化的后端 IP。
+  # 这些规则必须位于每日更新的 cn-domain / cn-ip 规则之前，避免被远程规则覆盖。
+  - DOMAIN-SUFFIX,chatgpt.com,PROXY
+  - DOMAIN-SUFFIX,openai.com,PROXY
+  - DOMAIN-SUFFIX,oaistatic.com,PROXY
+  - DOMAIN-SUFFIX,oaiusercontent.com,PROXY
+  - DOMAIN-SUFFIX,oaistatsig.com,PROXY
+  - DOMAIN-SUFFIX,openaimerge.com,PROXY
   - RULE-SET,cn-domain,DIRECT
   - RULE-SET,cn-ip,DIRECT
   - MATCH,PROXY
